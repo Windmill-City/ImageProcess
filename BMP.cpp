@@ -50,18 +50,39 @@ void toGray() {
 	BYTE* lpBits =
 		(BYTE*)&lpBitsInfo->bmiColors[lpBitsInfo->bmiHeader.biClrUsed];
 
-	int i, j;
-	BYTE* R, *G, *B;
+	int LineBytes_gray = (w * 8 + 31) / 32 * 4;
+	BITMAPINFO* lpBitsInfo_gray = (BITMAPINFO*)malloc(LineBytes_gray * h + 40 + 1024);
+
+	memcpy(lpBitsInfo_gray, lpBitsInfo, 40);
+	lpBitsInfo_gray->bmiHeader.biBitCount = 8;
+	lpBitsInfo_gray->bmiHeader.biClrUsed = 256;
+
+	int i;
+	for (i = 0; i < 256; i++) {
+		lpBitsInfo_gray->bmiColors[i].rgbRed = i;
+		lpBitsInfo_gray->bmiColors[i].rgbGreen = i;
+		lpBitsInfo_gray->bmiColors[i].rgbBlue = i;
+		lpBitsInfo_gray->bmiColors[i].rgbReserved = 0;
+	}
+
+	int j;
+	BYTE* R, * G, * B, avg, *pixel;
+	BYTE* lpBits_gray = (BYTE*)&lpBitsInfo_gray->bmiColors[256];
 	for (i = 0; i < h; i++)
 	{
 		for (j = 0; j < w; j++)
 		{
-			// 指向像素点(i,j)的指针
 			B = lpBits + LineBytes * i + j * 3;
 			G = B + 1;
 			R = G + 1;
 
-			*R = *G = *B = (*R + *G + *B) / 3;
+			avg = *R = *G = *B = (*R + *G + *B) / 3;
+
+			pixel = lpBits_gray + i * LineBytes_gray + j;
+			*pixel = avg;
 		}
 	}
+
+	free(lpBitsInfo);
+	lpBitsInfo = lpBitsInfo_gray;
 }
