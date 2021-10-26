@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CScrollView::OnFilePrintPreview)
 	ON_COMMAND(ID_GREY, &CCFD188View::OnGrey)
 	ON_UPDATE_COMMAND_UI(ID_GREY, &CCFD188View::OnUpdateGrey)
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -129,8 +130,30 @@ void CCFD188View::OnGrey()
 	Invalidate();
 }
 
-
+BOOL IsGray();
 void CCFD188View::OnUpdateGrey(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(lpBitsInfo != NULL && lpBitsInfo->bmiHeader.biBitCount == 24);
+	pCmdUI->Enable(lpBitsInfo != NULL && !IsGray());
+}
+
+void pixel(int i, int j, char* str);
+#include "MainFrm.h"
+
+void CCFD188View::OnMouseMove(UINT nFlags, CPoint point)
+{
+	char xy[100];
+	ZeroMemory(xy, sizeof(xy));
+	sprintf_s(xy, sizeof(xy)/sizeof(char),"X:%d Y:%d    ", point.x, point.y);
+
+	char rgb[100]; 
+	ZeroMemory(rgb, sizeof(rgb));
+	pixel(point.y, point.x, rgb);
+
+	strcat_s(xy, sizeof(xy),rgb);
+
+	WCHAR str[100];
+	wsprintf(str, L"%S", xy);
+	((CMainFrame*)GetParent())->SetMessageText(str);
+
+	CScrollView::OnMouseMove(nFlags, point);
 }
