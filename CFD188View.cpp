@@ -135,7 +135,7 @@ void CCFD188View::OnGrey()
 BOOL IsGray();
 void CCFD188View::OnUpdateGrey(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(lpBitsInfo != NULL && !IsGray());
+	pCmdUI->Enable(lpBitsInfo != NULL);
 }
 
 void pixel(int i, int j, char* str);

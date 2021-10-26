@@ -49,6 +49,7 @@ void loadBMP(LPCTSTR path) {
 
 void toGray() {
 	switch (lpBitsInfo->bmiHeader.biBitCount) {
+	case 1:
 	case 4:
 	case 8:
 		for (size_t i = 0; i < lpBitsInfo->bmiHeader.biClrUsed; i++)
@@ -116,7 +117,7 @@ BOOL IsGray() {
 	switch (lpBitsInfo->bmiHeader.biBitCount)
 	{
 	case 1:
-		return true;
+		return false;
 	case 4:
 	case 8:
 		int offset = lpBitsInfo->bmiHeader.biClrUsed/2;
