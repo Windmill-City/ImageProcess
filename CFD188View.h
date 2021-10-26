@@ -45,6 +45,8 @@ public:
 	afx_msg void OnGrey();
 	afx_msg void OnUpdateGrey(CCmdUI* pCmdUI);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnReload();
+	afx_msg void OnUpdateReload(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // CFD188View.cpp 中的调试版本

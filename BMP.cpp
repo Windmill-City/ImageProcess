@@ -6,6 +6,8 @@
 #define BITMAP_FILE_TYPE 0x4D42
 //BMP 图像数据
 BITMAPINFO* lpBitsInfo = NULL;
+BITMAPINFO* lpBitsInfoOrigin = NULL;
+DWORD bmOriginSize;
 
 void loadBMP(LPCTSTR path) {
 	std::ifstream bmpFile(path, std::ios::in | std::ios::binary);
@@ -29,15 +31,20 @@ void loadBMP(LPCTSTR path) {
 	info.biClrUsed = (0x1 << info.biBitCount) & 0x0000FFFF;
 	//图像长度bytes
 	DWORD imageSize = (info.biWidth * info.biBitCount + 31) / 32 * 4 * info.biHeight;
+	bmOriginSize = sizeof(info) + info.biClrUsed * sizeof(RGBQUAD) + imageSize;
 
 	if (lpBitsInfo) free(lpBitsInfo);
+	if (lpBitsInfoOrigin) free(lpBitsInfoOrigin);
 
-	lpBitsInfo = (BITMAPINFO*)malloc(sizeof(info) + info.biClrUsed * sizeof(RGBQUAD) + imageSize);
+	lpBitsInfo = (BITMAPINFO*)malloc(bmOriginSize);
+	lpBitsInfoOrigin = (BITMAPINFO*)malloc(bmOriginSize);
 
 	memcpy(lpBitsInfo, &info, sizeof(info));
 
 	bmpFile.read((char*)lpBitsInfo + sizeof(info), (size_t)info.biClrUsed * sizeof(RGBQUAD) + imageSize);
 	bmpFile.close();
+
+	memcpy(lpBitsInfoOrigin, lpBitsInfo, bmOriginSize);
 }
 
 void toGray() {

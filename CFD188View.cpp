@@ -30,6 +30,8 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_COMMAND(ID_GREY, &CCFD188View::OnGrey)
 	ON_UPDATE_COMMAND_UI(ID_GREY, &CCFD188View::OnUpdateGrey)
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_RELOAD, &CCFD188View::OnReload)
+	ON_UPDATE_COMMAND_UI(ID_RELOAD, &CCFD188View::OnUpdateReload)
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -156,4 +158,20 @@ void CCFD188View::OnMouseMove(UINT nFlags, CPoint point)
 	((CMainFrame*)GetParent())->SetMessageText(str);
 
 	CScrollView::OnMouseMove(nFlags, point);
+}
+
+extern BITMAPINFO* lpBitsInfoOrigin;
+extern DWORD bmOriginSize;
+void CCFD188View::OnReload()
+{
+	free(lpBitsInfo);
+	lpBitsInfo = (BITMAPINFO*)malloc(bmOriginSize);
+	memcpy(lpBitsInfo, lpBitsInfoOrigin, bmOriginSize);
+	Invalidate();
+}
+
+
+void CCFD188View::OnUpdateReload(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(lpBitsInfoOrigin != NULL);
 }
