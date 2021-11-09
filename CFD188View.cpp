@@ -32,6 +32,8 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_RELOAD, &CCFD188View::OnReload)
 	ON_UPDATE_COMMAND_UI(ID_RELOAD, &CCFD188View::OnUpdateReload)
+	ON_COMMAND(ID_Histogram, &CCFD188View::OnHistogram)
+	ON_UPDATE_COMMAND_UI(ID_Histogram, &CCFD188View::OnUpdateHistogram)
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -172,6 +174,19 @@ void CCFD188View::OnReload()
 
 
 void CCFD188View::OnUpdateReload(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(lpBitsInfoOrigin != NULL);
+}
+
+#include "CDlgHistogram.h"
+void CCFD188View::OnHistogram()
+{
+	CDlgHistogram dlg;
+	dlg.DoModal();
+}
+
+
+void CCFD188View::OnUpdateHistogram(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(lpBitsInfoOrigin != NULL);
 }

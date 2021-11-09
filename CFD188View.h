@@ -47,6 +47,8 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnReload();
 	afx_msg void OnUpdateReload(CCmdUI* pCmdUI);
+	afx_msg void OnHistogram();
+	afx_msg void OnUpdateHistogram(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // CFD188View.cpp 中的调试版本

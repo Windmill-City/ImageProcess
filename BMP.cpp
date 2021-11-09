@@ -28,7 +28,7 @@ void loadBMP(LPCTSTR path) {
 		return;
 	}
 	//调色板长度length
-	info.biClrUsed = (0x1 << info.biBitCount) & 0x0000FFFF;
+	info.biClrUsed = info.biClrUsed ? info.biClrUsed : (0x1 << info.biBitCount) & 0x0000FFFF;
 	//图像长度bytes
 	DWORD imageSize = (info.biWidth * info.biBitCount + 31) / 32 * 4 * info.biHeight;
 	bmOriginSize = sizeof(info) + info.biClrUsed * sizeof(RGBQUAD) + imageSize;
@@ -117,7 +117,7 @@ BOOL IsGray() {
 	switch (lpBitsInfo->bmiHeader.biBitCount)
 	{
 	case 1:
-		return false;
+		return true;
 	case 4:
 	case 8:
 		int offset = lpBitsInfo->bmiHeader.biClrUsed/2;
@@ -153,11 +153,18 @@ void pixel(int i, int j, char* str) {
 		break;
 	case 4:
 		pixel = lpBits + LineBytes * (h - 1 - i) + j / 2;
-		*pixel >>= j % 2 ? 4 : 0;
-		goto Handle;
+
+		if (IsGray())
+			sprintf_s(str, 100, "灰度值:%d", *pixel >> j % 2 ? 4 : 0);
+		else {
+			r = lpBitsInfo->bmiColors[(*pixel >> (j % 2 ? 4 : 0)) & 0xF].rgbRed;
+			g = lpBitsInfo->bmiColors[(*pixel >> (j % 2 ? 4 : 0)) & 0xF].rgbGreen;
+			b = lpBitsInfo->bmiColors[(*pixel >> (j % 2 ? 4 : 0)) & 0xF].rgbBlue;
+
+			sprintf_s(str, 100, "RGB(%d, %d, %d)", r, g, b);
+		}
 	case 8:
 		pixel = lpBits + LineBytes * (h - 1 - i) + j;
-		Handle:
 		if (IsGray())
 			sprintf_s(str, 100,"灰度值:%d", *pixel);
 		else {
@@ -177,5 +184,70 @@ void pixel(int i, int j, char* str) {
 		break;
 	default:
 		break;
+	}
+}
+
+int HistogramDataR[256];
+int HistogramDataG[256];
+int HistogramDataB[256];
+void Histogram() {
+	int w = lpBitsInfo->bmiHeader.biWidth;
+	int h = lpBitsInfo->bmiHeader.biHeight;
+
+	int LineBytes =
+		(w * lpBitsInfo->bmiHeader.biBitCount + 31) / 32 * 4;
+
+	BYTE* lpBits =
+		(BYTE*)&lpBitsInfo->bmiColors[lpBitsInfo->bmiHeader.biClrUsed];
+
+	BYTE* pixel;
+
+	ZeroMemory(HistogramDataR, sizeof(HistogramDataR));
+	ZeroMemory(HistogramDataG, sizeof(HistogramDataG));
+	ZeroMemory(HistogramDataB, sizeof(HistogramDataB));
+
+	for (int i = 0; i < h; i++)
+	{
+		for (int j = 0; j < w; j++)
+		{
+			BYTE pixelR;
+			BYTE pixelG;
+			BYTE pixelB;
+
+
+			switch (lpBitsInfo->bmiHeader.biBitCount)
+			{
+			case 1:
+				pixel = lpBits + LineBytes * (h - 1 - i) + j / 8;
+
+				pixelB = (*pixel >> (7 - j % 8) & 0x01);
+				pixelG = (*pixel >> (7 - j % 8) & 0x01);
+				pixelR = (*pixel >> (7 - j % 8) & 0x01);
+				break;
+			case 4:
+				pixel = lpBits + LineBytes * (h - 1 - i) + j / 2;
+
+				pixelR = lpBitsInfo->bmiColors[(*pixel >> (j % 2 ? 4 : 0)) & 0xF].rgbRed;
+				pixelG = lpBitsInfo->bmiColors[(*pixel >> (j % 2 ? 4 : 0)) & 0xF].rgbGreen;
+				pixelB = lpBitsInfo->bmiColors[(*pixel >> (j % 2 ? 4 : 0)) & 0xF].rgbBlue;
+				break;
+			case 8:
+				pixel = lpBits + LineBytes * (h - 1 - i) + j;
+
+				pixelR = lpBitsInfo->bmiColors[*pixel].rgbRed;
+				pixelG = lpBitsInfo->bmiColors[*pixel].rgbGreen;
+				pixelB = lpBitsInfo->bmiColors[*pixel].rgbBlue;
+				break;
+			case 24:
+				pixelB = *(lpBits + LineBytes * i + j * 3);
+				pixelG = *(lpBits + LineBytes * i + j * 3 + 1);
+				pixelR = *(lpBits + LineBytes * i + j * 3 + 2);
+				break;
+			}
+
+			HistogramDataR[pixelR]++;
+			HistogramDataG[pixelG]++;
+			HistogramDataB[pixelB]++;
+		}
 	}
 }

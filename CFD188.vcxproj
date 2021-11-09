@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CDlgHistogram.h" />
     <ClInclude Include="CFD188.h" />
     <ClInclude Include="CFD188Doc.h" />
     <ClInclude Include="CFD188View.h" />
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BMP.cpp" />
+    <ClCompile Include="CDlgHistogram.cpp" />
     <ClCompile Include="CFD188.cpp" />
     <ClCompile Include="CFD188Doc.cpp" />
     <ClCompile Include="CFD188View.cpp" />
