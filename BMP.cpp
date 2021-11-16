@@ -262,28 +262,48 @@ void Equalize() {
 	BYTE* lpBits =
 		(BYTE*)&lpBitsInfo->bmiColors[lpBitsInfo->bmiHeader.biClrUsed];
 
-	BYTE Map[256];
+	BYTE MapR[256];
+	BYTE MapG[256];
+	BYTE MapB[256];
 
 	Histogram();
 
 	for (size_t i = 0; i < 256; i++)
 	{
-		DWORD sum = 0;
+		DWORD sumR = 0;
+		DWORD sumG = 0;
+		DWORD sumB = 0;
 
 		for (size_t j = 0; j <= i ; j++)
 		{
-			sum += HistogramDataR[j];
+			sumR += HistogramDataR[j];
+			sumG += HistogramDataG[j];
+			sumB += HistogramDataB[j];
 		}
 
-		Map[i] = (BYTE)(sum * 255 / w / h + 0.5);
+		MapR[i] = (BYTE)(sumR * 255 / w / h + 0.5);
+		MapG[i] = (BYTE)(sumG * 255 / w / h + 0.5);
+		MapB[i] = (BYTE)(sumB * 255 / w / h + 0.5);
 	}
 
 	BYTE* pixel;
 
-	for (int i = 0; i < lpBitsInfo->bmiHeader.biClrUsed; i++)
+	for (int i = 0; i < w; i++)
 	{
-		lpBitsInfo->bmiColors[i].rgbRed = Map[i];
-		lpBitsInfo->bmiColors[i].rgbGreen = Map[i];
-		lpBitsInfo->bmiColors[i].rgbBlue = Map[i];
+		for (int j = 0; j < h; j++) 
+		{
+			switch (lpBitsInfo->bmiHeader.biBitCount)
+			{
+			case 8:
+				pixel = lpBits + LineBytes * (h - 1 - i) + j;
+				*pixel = MapR[*pixel];
+				break;
+			case 24:
+				*(lpBits + LineBytes * i + j * 3) = MapB[*(lpBits + LineBytes * i + j * 3)];
+				*(lpBits + LineBytes * i + j * 3 + 1) = MapG[*(lpBits + LineBytes * i + j * 3 + 1)];
+				*(lpBits + LineBytes * i + j * 3 + 2) = MapR[*(lpBits + LineBytes * i + j * 3 + 2)];
+				break;
+			}
+		}
 	}
 }

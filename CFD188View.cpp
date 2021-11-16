@@ -203,5 +203,5 @@ void CCFD188View::OnEqualize()
 
 void CCFD188View::OnUpdateEqualize(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(lpBitsInfo != NULL && IsGray() && lpBitsInfo->bmiHeader.biBitCount == 8);
+	pCmdUI->Enable(lpBitsInfo != NULL && (lpBitsInfo->bmiHeader.biBitCount == 8 || lpBitsInfo->bmiHeader.biBitCount == 24));
 }
