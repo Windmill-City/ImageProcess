@@ -34,6 +34,8 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_UPDATE_COMMAND_UI(ID_RELOAD, &CCFD188View::OnUpdateReload)
 	ON_COMMAND(ID_Histogram, &CCFD188View::OnHistogram)
 	ON_UPDATE_COMMAND_UI(ID_Histogram, &CCFD188View::OnUpdateHistogram)
+	ON_COMMAND(ID_EQUALIZE, &CCFD188View::OnEqualize)
+	ON_UPDATE_COMMAND_UI(ID_EQUALIZE, &CCFD188View::OnUpdateEqualize)
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -189,4 +191,17 @@ void CCFD188View::OnHistogram()
 void CCFD188View::OnUpdateHistogram(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(lpBitsInfoOrigin != NULL);
+}
+
+extern void Equalize();
+void CCFD188View::OnEqualize()
+{
+	Equalize();
+	Invalidate();
+}
+
+
+void CCFD188View::OnUpdateEqualize(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(lpBitsInfo != NULL && IsGray() && lpBitsInfo->bmiHeader.biBitCount == 8);
 }

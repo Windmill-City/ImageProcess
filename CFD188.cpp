@@ -177,8 +177,3 @@ void CCFD188App::OnAppAbout()
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
-
-// CCFD188App 消息处理程序
-
-
-

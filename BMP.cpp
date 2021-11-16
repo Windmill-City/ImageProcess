@@ -251,3 +251,39 @@ void Histogram() {
 		}
 	}
 }
+
+void Equalize() {
+	int w = lpBitsInfo->bmiHeader.biWidth;
+	int h = lpBitsInfo->bmiHeader.biHeight;
+
+	int LineBytes =
+		(w * lpBitsInfo->bmiHeader.biBitCount + 31) / 32 * 4;
+
+	BYTE* lpBits =
+		(BYTE*)&lpBitsInfo->bmiColors[lpBitsInfo->bmiHeader.biClrUsed];
+
+	BYTE Map[256];
+
+	Histogram();
+
+	for (size_t i = 0; i < 256; i++)
+	{
+		DWORD sum = 0;
+
+		for (size_t j = 0; j <= i ; j++)
+		{
+			sum += HistogramDataR[j];
+		}
+
+		Map[i] = (BYTE)(sum * 255 / w / h + 0.5);
+	}
+
+	BYTE* pixel;
+
+	for (int i = 0; i < lpBitsInfo->bmiHeader.biClrUsed; i++)
+	{
+		lpBitsInfo->bmiColors[i].rgbRed = Map[i];
+		lpBitsInfo->bmiColors[i].rgbGreen = Map[i];
+		lpBitsInfo->bmiColors[i].rgbBlue = Map[i];
+	}
+}
