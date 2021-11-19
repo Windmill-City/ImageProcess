@@ -205,8 +205,13 @@ void CCFD188View::OnUpdateReload(CCmdUI* pCmdUI)
 	pCmdUI->Enable(GetDocument()->ActiveImageOriginal != nullptr);
 }
 
+#include "CDlgHistogram.h"
+
 void CCFD188View::OnHistogram()
 {
+	CDlgHistogram dlg;
+	dlg.setView(this);
+	dlg.DoModal();
 }
 
 

@@ -6,6 +6,11 @@
 #define IDP_OLE_INIT_FAILED             100
 #define IDR_MAINFRAME                   128
 #define IDR_CFD188TYPE                  130
+#define IDD_Histogram                   314
+#define IDC_Channel_Select              1009
+#define IDC_Text_Channel                1010
+#define IDC_Point_Left                  1015
+#define IDC_Point_Right                 1017
 #define ID_GREY                         32773
 #define ID_RELOAD                       32777
 #define ID_Histogram                    32778
@@ -15,9 +20,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        314
+#define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1009
+#define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

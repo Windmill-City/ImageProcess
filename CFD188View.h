@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CFD188Doc.h"
 
 class CCFD188View : public CScrollView
 {
