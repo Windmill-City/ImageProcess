@@ -42,8 +42,6 @@ END_MESSAGE_MAP()
 
 CCFD188View::CCFD188View() noexcept
 {
-	// TODO: 在此处添加构造代码
-
 }
 
 CCFD188View::~CCFD188View()
@@ -52,28 +50,42 @@ CCFD188View::~CCFD188View()
 
 BOOL CCFD188View::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: 在此处通过修改
-	//  CREATESTRUCT cs 来修改窗口类或样式
-
 	return CScrollView::PreCreateWindow(cs);
 }
 
 // CCFD188View 绘图
-//BMP 图像数据
-extern BITMAPINFO* lpBitsInfo;
 void CCFD188View::OnDraw(CDC* pDC)
 {
 	CCFD188Doc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
-	if (!lpBitsInfo) return;
-	LPVOID lpBits = (LPVOID)&lpBitsInfo->bmiColors[lpBitsInfo->bmiHeader.biClrUsed];
-	
-	StretchDIBits(pDC->m_hDC,
-		0, 0, lpBitsInfo->bmiHeader.biWidth, lpBitsInfo->bmiHeader.biHeight,
-		0, 0, lpBitsInfo->bmiHeader.biWidth, lpBitsInfo->bmiHeader.biHeight,
-		lpBits, lpBitsInfo, DIB_RGB_COLORS, SRCCOPY);
+	if (!pDoc) return;
+
+	auto image = pDoc->ActiveImage;
+	if (!image) return;
+
+	//内存DC, 双缓冲[内存DC-设备DC]
+	CDC memDC;
+	memDC.CreateCompatibleDC(NULL);
+
+	//绘图区域
+	CBitmap bitmap;
+	bitmap.CreateCompatibleBitmap(pDC, (int)image->Width, (int)image->Height);
+
+	//绘图区域属性
+	BITMAP bm;
+	bitmap.GetObject(sizeof(bm), &bm);
+
+	//图像数据->绘图区域
+	bitmap.SetBitmapBits(bm.bmWidthBytes * bm.bmHeight, image->Pixels.data());
+
+	//绘图区域->内存DC, 在内存中绘制
+	CBitmap* pOldBmp = memDC.SelectObject(&bitmap);
+
+	//绘制区域->设备DC, 显示绘制结果
+	pDC->BitBlt(0, 0, (int)image->Width, (int)image->Height, &memDC, 0, 0, SRCCOPY);
+
+	//释放位图对象, 避免资源泄露
+	memDC.SelectObject(pOldBmp);
 }
 
 void CCFD188View::OnInitialUpdate()
@@ -81,8 +93,11 @@ void CCFD188View::OnInitialUpdate()
 	CScrollView::OnInitialUpdate();
 
 	CSize sizeTotal;
-	// TODO: 计算此视图的合计大小
-	sizeTotal.cx = sizeTotal.cy = 100;
+	std::shared_ptr<Image> image = GetDocument()->ActiveImage;
+	if (image) {
+		sizeTotal.cx = (LONG)image->Width;
+		sizeTotal.cy = (LONG)image->Height;
+	}
 	SetScrollSizes(MM_TEXT, sizeTotal);
 }
 
@@ -129,79 +144,73 @@ CCFD188Doc* CCFD188View::GetDocument() const // 非调试版本是内联的
 
 // CCFD188View 消息处理程序
 
-void toGray();
-void CCFD188View::OnGrey()
-{
-	toGray();
-	Invalidate();
-}
-
-BOOL IsGray();
-void CCFD188View::OnUpdateGrey(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(lpBitsInfo != NULL);
-}
-
-void pixel(int i, int j, char* str);
 #include "MainFrm.h"
+#include "StringUtils.h"
 
 void CCFD188View::OnMouseMove(UINT nFlags, CPoint point)
 {
-	char xy[100];
-	ZeroMemory(xy, sizeof(xy));
-	sprintf_s(xy, sizeof(xy)/sizeof(char),"X:%d Y:%d    ", point.x, point.y);
-
-	char rgb[100]; 
-	ZeroMemory(rgb, sizeof(rgb));
-	pixel(point.y, point.x, rgb);
-
-	strcat_s(xy, sizeof(xy),rgb);
-
-	WCHAR str[100];
-	wsprintf(str, L"%S", xy);
-	((CMainFrame*)GetParent())->SetMessageText(str);
-
 	CScrollView::OnMouseMove(nFlags, point);
+
+	std::shared_ptr<Image> image = GetDocument()->ActiveImage;
+	if (!image || point.x >= image->Width || point.y >= image->Height) return;
+
+	auto pixel = image->Pixels[(size_t)point.y * point.x];
+	auto pixelInfo = StringUtils::format("ARGB(%d, %d, %d, %d)", pixel.A, pixel.R, pixel.G, pixel.B);
+
+	((CMainFrame*)GetParent())->SetMessageText(StringUtils::convert(pixelInfo.c_str()).c_str());
 }
 
-extern BITMAPINFO* lpBitsInfoOrigin;
-extern DWORD bmOriginSize;
-void CCFD188View::OnReload()
+#include "ImageGrayscale.h"
+
+void CCFD188View::OnGrey()
 {
-	free(lpBitsInfo);
-	lpBitsInfo = (BITMAPINFO*)malloc(bmOriginSize);
-	memcpy(lpBitsInfo, lpBitsInfoOrigin, bmOriginSize);
+	auto pDoc = GetDocument();
+	pDoc->ActiveImage = ImageGrayscale::grayscale(pDoc->ActiveImage);
 	Invalidate();
+	pDoc->SetModifiedFlag();
 }
 
-
-void CCFD188View::OnUpdateReload(CCmdUI* pCmdUI)
+void CCFD188View::OnUpdateGrey(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(lpBitsInfoOrigin != NULL);
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
 }
 
-#include "CDlgHistogram.h"
-void CCFD188View::OnHistogram()
-{
-	CDlgHistogram dlg;
-	dlg.DoModal();
-}
+#include "ImageEqualize.h"
 
-
-void CCFD188View::OnUpdateHistogram(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(lpBitsInfoOrigin != NULL);
-}
-
-extern void Equalize();
 void CCFD188View::OnEqualize()
 {
-	Equalize();
+	auto pDoc = GetDocument();
+	pDoc->ActiveImage = ImageEqualize::equalize(pDoc->ActiveImage);
 	Invalidate();
+	pDoc->SetModifiedFlag();
 }
 
 
 void CCFD188View::OnUpdateEqualize(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(lpBitsInfo != NULL && (lpBitsInfo->bmiHeader.biBitCount == 8 || lpBitsInfo->bmiHeader.biBitCount == 24));
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+void CCFD188View::OnReload()
+{
+	auto pDoc = GetDocument();
+	pDoc->ActiveImage = pDoc->ActiveImageOriginal;
+	Invalidate();
+	pDoc->SetModifiedFlag(false);
+}
+
+
+void CCFD188View::OnUpdateReload(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImageOriginal != nullptr);
+}
+
+void CCFD188View::OnHistogram()
+{
+}
+
+
+void CCFD188View::OnUpdateHistogram(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
 }

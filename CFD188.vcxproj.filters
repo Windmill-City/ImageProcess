@@ -13,24 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\Image">
+      <UniqueIdentifier>{5b16ede4-cce3-45e3-a3e5-d680c66e07f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Image\ImageFormat">
+      <UniqueIdentifier>{91453e99-8df0-4c4a-aca5-7ad59e7d87e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Window">
+      <UniqueIdentifier>{c754e813-9ef4-4638-88d7-257b41a04c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Exception">
+      <UniqueIdentifier>{b18dfee6-6697-4689-b915-020fde7177b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Image\ImageTrans">
+      <UniqueIdentifier>{09c87806-342f-4ad1-9da6-b018d7df9816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Window\Controls">
+      <UniqueIdentifier>{7e9ad98a-9e9a-4267-ab65-a44f33d91909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Window\Dialogs">
+      <UniqueIdentifier>{20e296fe-c2d4-40ad-9f8e-52b8f4383a5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CFD188.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MainFrm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CFD188Doc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CFD188View.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
@@ -39,8 +48,65 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CDlgHistogram.h">
+    <ClInclude Include="StringUtils.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BMPFormat.h">
+      <Filter>头文件\Image\ImageFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="CFD188.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="CFD188Doc.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="CFD188View.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="FormattedException.h">
+      <Filter>头文件\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>头文件\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageEqualize.h">
+      <Filter>头文件\Image\ImageTrans</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageFFT.h">
+      <Filter>头文件\Image\ImageTrans</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageFilterTransform.h">
+      <Filter>头文件\Image\ImageTrans</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageGrayscale.h">
+      <Filter>头文件\Image\ImageTrans</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLinearTransform.h">
+      <Filter>头文件\Image\ImageTrans</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageFormat.h">
+      <Filter>头文件\Image\ImageFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageFormats.h">
+      <Filter>头文件\Image\ImageFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageReader.h">
+      <Filter>头文件\Image\ImageFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageWriter.h">
+      <Filter>头文件\Image\ImageFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="ImagePixel.h">
+      <Filter>头文件\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageHistogram.h">
+      <Filter>头文件\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageProperty.h">
+      <Filter>头文件\Image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,10 +125,52 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BMP.cpp">
+    <ClCompile Include="Image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CDlgHistogram.cpp">
+    <ClCompile Include="ImageReader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageWriter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFormat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageHistogram.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageGrayscale.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageEqualize.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageLinearTransform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFFT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFilterTransform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImagePixel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFormats.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BMPFormat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageProperty.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FormattedException.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

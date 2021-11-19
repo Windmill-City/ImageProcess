@@ -30,8 +30,6 @@ END_MESSAGE_MAP()
 
 CCFD188Doc::CCFD188Doc() noexcept
 {
-	// TODO: 在此添加一次性构造代码
-
 }
 
 CCFD188Doc::~CCFD188Doc()
@@ -134,16 +132,24 @@ void CCFD188Doc::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
+#include "StringUtils.h"
 
-// CCFD188Doc 命令
-
-void loadBMP(LPCTSTR path);
 BOOL CCFD188Doc::OnOpenDocument(LPCTSTR lpszPathName)
 {
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE;
 
-	loadBMP(lpszPathName);
+	try
+	{
+		ActiveImage = theApp.Formats->read(std::wstring(lpszPathName));
+		ActiveImageOriginal = std::make_shared<Image>(*ActiveImage);
+		//TODO:Trigger Event
+	}
+	catch (const std::exception& ex)
+	{
+		AfxMessageBox(StringUtils::convert(ex.what()).c_str(), MB_OK, MB_ICONERROR);
+		return FALSE;
+	}
 
 	return TRUE;
 }

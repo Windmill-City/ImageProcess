@@ -30,7 +30,6 @@ END_MESSAGE_MAP()
 
 
 // CCFD188App 构造
-
 CCFD188App::CCFD188App() noexcept
 {
 
@@ -87,15 +86,10 @@ BOOL CCFD188App::InitInstance()
 	// 使用 RichEdit 控件需要 AfxInitRichEdit2()
 	// AfxInitRichEdit2();
 
-	// 标准初始化
-	// 如果未使用这些功能并希望减小
-	// 最终可执行文件的大小，则应移除下列
-	// 不需要的特定初始化例程
-	// 更改用于存储设置的注册表项
-	// TODO: 应适当修改该字符串，
-	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 	LoadStdProfileSettings(4);  // 加载标准 INI 文件选项(包括 MRU)
+
+	//初始化图像格式
+	Formats->initialize();
 
 
 	// 注册应用程序的文档模板。  文档模板

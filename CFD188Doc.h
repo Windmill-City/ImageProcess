@@ -4,6 +4,7 @@
 
 
 #pragma once
+#include "Image.h"
 
 
 class CCFD188Doc : public CDocument
@@ -12,11 +13,9 @@ protected: // 仅从序列化创建
 	CCFD188Doc() noexcept;
 	DECLARE_DYNCREATE(CCFD188Doc)
 
-// 特性
 public:
-
-// 操作
-public:
+	std::shared_ptr<Image> ActiveImageOriginal;
+	std::shared_ptr<Image> ActiveImage;
 
 // 重写
 public:

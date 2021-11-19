@@ -2,6 +2,7 @@
 // CFD188.h: CFD188 应用程序的主头文件
 //
 #pragma once
+#include "ImageFormats.h"
 
 #ifndef __AFXWIN_H__
 	#error "在包含此文件之前包含 'pch.h' 以生成 PCH"
@@ -16,6 +17,8 @@
 
 class CCFD188App : public CWinApp
 {
+public:
+	std::unique_ptr<ImageFormats> Formats = std::make_unique<ImageFormats>();
 public:
 	CCFD188App() noexcept;
 

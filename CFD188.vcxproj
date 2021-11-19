@@ -183,22 +183,50 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CDlgHistogram.h" />
+    <ClInclude Include="BMPFormat.h" />
     <ClInclude Include="CFD188.h" />
     <ClInclude Include="CFD188Doc.h" />
     <ClInclude Include="CFD188View.h" />
+    <ClInclude Include="FormattedException.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="ImageEqualize.h" />
+    <ClInclude Include="ImageFFT.h" />
+    <ClInclude Include="ImageFilterTransform.h" />
+    <ClInclude Include="ImageFormat.h" />
+    <ClInclude Include="ImageFormats.h" />
+    <ClInclude Include="ImageHistogram.h" />
+    <ClInclude Include="ImageLinearTransform.h" />
+    <ClInclude Include="ImagePixel.h" />
+    <ClInclude Include="ImageProperty.h" />
+    <ClInclude Include="ImageReader.h" />
+    <ClInclude Include="ImageGrayscale.h" />
+    <ClInclude Include="ImageWriter.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="StringUtils.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BMP.cpp" />
-    <ClCompile Include="CDlgHistogram.cpp" />
+    <ClCompile Include="BMPFormat.cpp" />
     <ClCompile Include="CFD188.cpp" />
     <ClCompile Include="CFD188Doc.cpp" />
     <ClCompile Include="CFD188View.cpp" />
+    <ClCompile Include="FormattedException.cpp" />
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageEqualize.cpp" />
+    <ClCompile Include="ImageFFT.cpp" />
+    <ClCompile Include="ImageFilterTransform.cpp" />
+    <ClCompile Include="ImageFormat.cpp" />
+    <ClCompile Include="ImageFormats.cpp" />
+    <ClCompile Include="ImageHistogram.cpp" />
+    <ClCompile Include="ImageLinearTransform.cpp" />
+    <ClCompile Include="ImagePixel.cpp" />
+    <ClCompile Include="ImageProperty.cpp" />
+    <ClCompile Include="ImageReader.cpp" />
+    <ClCompile Include="ImageGrayscale.cpp" />
+    <ClCompile Include="ImageWriter.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -206,6 +234,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CFD188.rc" />
