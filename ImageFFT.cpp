@@ -9,6 +9,10 @@
 
 std::string ImageFFT::PropertyName = "FFT";
 
+std::string ImageFFT::PropertyName_R = "FFT_R";
+std::string ImageFFT::PropertyName_G = "FFT_G";
+std::string ImageFFT::PropertyName_B = "FFT_B";
+
 /// <summary>
 /// Rader 雷德倒位序算法
 /// </summary>
@@ -44,6 +48,18 @@ void ImageFFT::transpose(std::vector<std::complex<double>>::iterator begin, std:
 		{
 			swap(begin[i * N + j], begin[j * N + i]);
 		}
+	}
+}
+
+void ImageFFT::normalize(std::vector<double>::iterator begin, std::vector<double>::iterator end)
+{
+	auto min = *std::min_element(begin, end);
+	auto max = *std::max_element(begin, end);
+	auto section = max - min;
+
+	for (; begin != end; begin++)
+	{
+		*begin = (*begin - min) / section;
 	}
 }
 
@@ -199,22 +215,25 @@ std::shared_ptr<Image> ImageFFT::fft(std::shared_ptr<Image> image)
 		}
 	}
 
-	double scaleR = 255.0 / (*std::max_element(modulusR.begin(), modulusR.end()));
-	double scaleG = 255.0 / (*std::max_element(modulusG.begin(), modulusG.end()));
-	double scaleB = 255.0 / (*std::max_element(modulusB.begin(), modulusB.end()));
+	normalize(modulusR.begin(), modulusR.end());
+	normalize(modulusG.begin(), modulusG.end());
+	normalize(modulusB.begin(), modulusB.end());
 
 	//将FFT结果映射回图片
 	for (size_t h = 0; h < result->Height; h++)
 	{
 		for (size_t w = 0; w < result->Width; w++)
 		{
-			result->Pixels[h * result->Width + w].R = (BYTE)(modulusR[h * result->Width + w] * scaleR);
-			result->Pixels[h * result->Width + w].G = (BYTE)(modulusG[h * result->Width + w] * scaleG);
-			result->Pixels[h * result->Width + w].B = (BYTE)(modulusB[h * result->Width + w] * scaleB);
+			result->Pixels[h * result->Width + w].R = (BYTE)(modulusR[h * result->Width + w] * 255 * 1e3);
+			result->Pixels[h * result->Width + w].G = (BYTE)(modulusG[h * result->Width + w] * 255 * 1e3);
+			result->Pixels[h * result->Width + w].B = (BYTE)(modulusB[h * result->Width + w] * 255 * 1e3);
 		}
 	}
 
 	result->Properties[PropertyName] = std::make_shared<ImagePropertyOf<bool>>(true);
+	result->Properties[PropertyName_R] = std::make_shared<ImagePropertyOf<std::vector<std::complex<double>>>>(std::move(complexR));
+	result->Properties[PropertyName_G] = std::make_shared<ImagePropertyOf<std::vector<std::complex<double>>>>(std::move(complexG));
+	result->Properties[PropertyName_B] = std::make_shared<ImagePropertyOf<std::vector<std::complex<double>>>>(std::move(complexB));
 
 	return result;
 }
@@ -223,20 +242,9 @@ std::shared_ptr<Image> ImageFFT::ifft(std::shared_ptr<Image> image)
 {
 	std::shared_ptr<Image> result = std::make_shared<Image>(*image);
 
-	std::vector<std::complex<double>> complexR(result->Width * result->Height);
-	std::vector<std::complex<double>> complexG(result->Width * result->Height);
-	std::vector<std::complex<double>> complexB(result->Width * result->Height);
-
-	//将像素RGB数据转换为复数形式
-	for (size_t h = 0; h < result->Height; h++)
-	{
-		for (size_t w = 0; w < result->Width; w++)
-		{
-			complexR[h * result->Width + w] = std::complex<double>(result->Pixels[h * result->Width + w].R, 0);
-			complexG[h * result->Width + w] = std::complex<double>(result->Pixels[h * result->Width + w].G, 0);
-			complexB[h * result->Width + w] = std::complex<double>(result->Pixels[h * result->Width + w].B, 0);
-		}
-	}
+	std::vector<std::complex<double>> complexR = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_R].get())->Value;
+	std::vector<std::complex<double>> complexG = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_G].get())->Value;
+	std::vector<std::complex<double>> complexB = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_B].get())->Value;
 
 	auto R_future = std::async(std::launch::async, ifft2, complexR.begin(), complexR.end());
 	auto G_future = std::async(std::launch::async, ifft2, complexG.begin(), complexG.end());
@@ -260,18 +268,14 @@ std::shared_ptr<Image> ImageFFT::ifft(std::shared_ptr<Image> image)
 		}
 	}
 
-	double scaleR = 255.0 / (*std::max_element(modulusR.begin(), modulusR.end()));
-	double scaleG = 255.0 / (*std::max_element(modulusG.begin(), modulusG.end()));
-	double scaleB = 255.0 / (*std::max_element(modulusB.begin(), modulusB.end()));
-
 	//将IFFT结果映射回图片，同时进行去中心化处理
 	for (size_t h = 0; h < result->Height; h++)
 	{
 		for (size_t w = 0; w < result->Width; w++)
 		{
-			result->Pixels[h * result->Width + w].R = (BYTE)(modulusR[h * result->Width + w] * scaleR * std::pow(-1, h + w));
-			result->Pixels[h * result->Width + w].G = (BYTE)(modulusG[h * result->Width + w] * scaleG * std::pow(-1, h + w));
-			result->Pixels[h * result->Width + w].B = (BYTE)(modulusB[h * result->Width + w] * scaleB * std::pow(-1, h + w));
+			result->Pixels[h * result->Width + w].R = (BYTE)modulusR[h * result->Width + w];
+			result->Pixels[h * result->Width + w].G = (BYTE)modulusG[h * result->Width + w];
+			result->Pixels[h * result->Width + w].B = (BYTE)modulusB[h * result->Width + w];
 		}
 	}
 

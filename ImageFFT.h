@@ -4,11 +4,16 @@
 #include "Image.h"
 class ImageFFT
 {
+	static std::string PropertyName_R;
+	static std::string PropertyName_G;
+	static std::string PropertyName_B;
 public:
 	static std::string PropertyName;
 public:
 	static void reversal(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end);
 	static void transpose(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end);
+
+	static void normalize(std::vector<double>::iterator begin, std::vector<double>::iterator end);
 
 	static void fft(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end);
 	static void ifft(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end);
