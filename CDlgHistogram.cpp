@@ -41,6 +41,7 @@ void CDlgHistogram::applyLinearTrans()
 	auto intercept = PosLeft;
 
 	View->GetDocument()->ActiveImage = ImageLinearTransform::linear(slope, intercept, ImageOriginal);
+	View->GetDocument()->SetModifiedFlag();
 	View->Invalidate();
 
 	Invalidate();

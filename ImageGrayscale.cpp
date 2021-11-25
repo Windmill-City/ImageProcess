@@ -9,7 +9,7 @@
 std::shared_ptr<Image> ImageGrayscale::grayscale(std::shared_ptr<Image> image)
 {
 	//灰度化前后图片大小不变
-	auto grayscaled = std::make_shared<Image>(image->Width, image->Height);
+	auto grayscaled = std::make_shared<Image>(*image);
 
 	for (size_t h = 0; h < grayscaled->Height; h++)
 	{

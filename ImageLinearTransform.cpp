@@ -3,7 +3,7 @@
 
 std::shared_ptr<Image> ImageLinearTransform::linear(double slope, int intercept, std::shared_ptr<Image> image)
 {
-    auto result = std::make_shared<Image>(image->Width, image->Height);
+    auto result = std::make_shared<Image>(*image);
 
 	for (size_t h = 0; h < image->Height; h++)
 	{

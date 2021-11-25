@@ -22,7 +22,7 @@ std::shared_ptr<Image> ImageFormats::read(std::wstring path)
 	{
 		if (Formats[i]->Ext.compare(extStr) == 0) {
 			auto image = Formats[i]->Reader->read(path);
-			image->Properties.insert(std::make_pair(ImageFormatProperty::PropertyName, ImageFormatProperty(Formats[i])));
+			image->Properties.insert(std::make_pair(ImageFormat::PropertyName, ImagePropertyOf<std::shared_ptr<ImageFormat>>(Formats[i])));
 			return image;
 		}
 	}

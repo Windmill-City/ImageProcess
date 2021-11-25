@@ -11,7 +11,7 @@
 std::shared_ptr<Image> ImageEqualize::equalize(std::shared_ptr<Image> image)
 {
     //直方图均衡化前后图片大小不变
-    auto equalized = std::make_shared<Image>(image->Width, image->Height);
+    auto equalized = std::make_shared<Image>(*image);
 
     //RGB各色直方图数据
     auto histogramRed = ImageHistogram::getHistogramRed(image);

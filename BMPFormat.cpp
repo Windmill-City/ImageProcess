@@ -72,4 +72,5 @@ std::shared_ptr<Image> BMPFormat::BMPReader::read(std::wstring path)
 
 void BMPFormat::BMPWriter::write(std::shared_ptr<Image> image, std::wstring path)
 {
+
 }
