@@ -36,6 +36,8 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_UPDATE_COMMAND_UI(ID_Histogram, &CCFD188View::OnUpdateHistogram)
 	ON_COMMAND(ID_EQUALIZE, &CCFD188View::OnEqualize)
 	ON_UPDATE_COMMAND_UI(ID_EQUALIZE, &CCFD188View::OnUpdateEqualize)
+	ON_COMMAND(ID_FFT, &CCFD188View::OnFFT)
+	ON_UPDATE_COMMAND_UI(ID_FFT, &CCFD188View::OnUpdateFFT)
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -216,6 +218,23 @@ void CCFD188View::OnHistogram()
 
 
 void CCFD188View::OnUpdateHistogram(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+#include "ImageFFT.h"
+
+void CCFD188View::OnFFT()
+{
+	auto pDoc = GetDocument();
+	auto propFFT = static_cast<ImagePropertyOf<bool>*>(pDoc->ActiveImage->Properties[ImageFFT::PropertyName].get());
+	pDoc->ActiveImage = propFFT && propFFT->Value ? ImageFFT::ifft(pDoc->ActiveImage) : ImageFFT::fft(pDoc->ActiveImage);
+	Invalidate();
+	pDoc->SetModifiedFlag();
+}
+
+
+void CCFD188View::OnUpdateFFT(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
 }

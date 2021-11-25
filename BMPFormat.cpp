@@ -55,7 +55,7 @@ std::shared_ptr<Image> BMPFormat::BMPReader::read(std::wstring path)
 			case 8:
 				image->Pixels[h * image->Height + w] = (ImagePixel)colors[
 					(lineBytes[w / (8 / info.biBitCount)]
-						>> (8 - info.biBitCount) - (w % (8 / info.biBitCount) * info.biBitCount))
+						>> ((8 - info.biBitCount) - (w % (8 / info.biBitCount) * info.biBitCount)))
 						& mask];
 				break;
 			case 24:
