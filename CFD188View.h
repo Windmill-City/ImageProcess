@@ -54,6 +54,16 @@ public:
 	afx_msg void OnUpdateEqualize(CCmdUI* pCmdUI);
 	afx_msg void OnFFT();
 	afx_msg void OnUpdateFFT(CCmdUI* pCmdUI);
+	afx_msg void OnAvgFilter();
+	afx_msg void OnUpdateAvgFilter(CCmdUI* pCmdUI);
+	afx_msg void OnMidFilter();
+	afx_msg void OnUpdateMidFilter(CCmdUI* pCmdUI);
+	afx_msg void OnGauss();
+	afx_msg void OnUpdateGauss(CCmdUI* pCmdUI);
+	afx_msg void OnLaplace();
+	afx_msg void OnUpdateLaplace(CCmdUI* pCmdUI);
+	afx_msg void OnLaplaceNormal();
+	afx_msg void OnUpdateLaplaceNormal(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // CFD188View.cpp 中的调试版本

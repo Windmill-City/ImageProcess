@@ -38,6 +38,16 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_UPDATE_COMMAND_UI(ID_EQUALIZE, &CCFD188View::OnUpdateEqualize)
 	ON_COMMAND(ID_FFT, &CCFD188View::OnFFT)
 	ON_UPDATE_COMMAND_UI(ID_FFT, &CCFD188View::OnUpdateFFT)
+	ON_COMMAND(ID_AVG_FILTER, &CCFD188View::OnAvgFilter)
+	ON_UPDATE_COMMAND_UI(ID_AVG_FILTER, &CCFD188View::OnUpdateAvgFilter)
+	ON_COMMAND(ID_MID_FILTER, &CCFD188View::OnMidFilter)
+	ON_UPDATE_COMMAND_UI(ID_MID_FILTER, &CCFD188View::OnUpdateMidFilter)
+	ON_COMMAND(ID_GAUSS, &CCFD188View::OnGauss)
+	ON_UPDATE_COMMAND_UI(ID_GAUSS, &CCFD188View::OnUpdateGauss)
+	ON_COMMAND(ID_Laplace, &CCFD188View::OnLaplace)
+	ON_UPDATE_COMMAND_UI(ID_Laplace, &CCFD188View::OnUpdateLaplace)
+	ON_COMMAND(ID_Laplace_Normal, &CCFD188View::OnLaplaceNormal)
+	ON_UPDATE_COMMAND_UI(ID_Laplace_Normal, &CCFD188View::OnUpdateLaplaceNormal)
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -235,6 +245,111 @@ void CCFD188View::OnFFT()
 
 
 void CCFD188View::OnUpdateFFT(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+#include "ImageFilterTransform.h"
+
+void CCFD188View::OnAvgFilter()
+{
+	auto pDoc = GetDocument();
+	pDoc->ActiveImage = ImageTemplateFilter::applyTemplateAverage(pDoc->ActiveImage,
+		ImageTemplateAverageFilterContext(std::vector<std::vector<int32_t>>(3, std::vector<int32_t>(3, 1))));
+	Invalidate();
+	pDoc->SetModifiedFlag();
+}
+
+
+void CCFD188View::OnUpdateAvgFilter(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+
+void CCFD188View::OnMidFilter()
+{
+	auto pDoc = GetDocument();
+	pDoc->ActiveImage = ImageTemplateFilter::applyTemplateMedian(pDoc->ActiveImage, ImageTemplateMedianFilterContext(3, 3));
+	Invalidate();
+	pDoc->SetModifiedFlag();
+}
+
+
+void CCFD188View::OnUpdateMidFilter(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+
+void CCFD188View::OnGauss()
+{
+	auto pDoc = GetDocument();
+	//高斯滤波模板
+	auto matrix = std::vector<std::vector<int32_t>>(3, std::vector<int32_t>(3, 1));
+
+	matrix[1][1] = 4;
+
+	matrix[0][1] = 2;
+	matrix[1][0] = 2;
+	matrix[1][2] = 2;
+	matrix[2][1] = 2;
+
+	pDoc->ActiveImage = ImageTemplateFilter::applyTemplateAverage(pDoc->ActiveImage,
+		ImageTemplateAverageFilterContext(matrix));
+	Invalidate();
+	pDoc->SetModifiedFlag();
+}
+
+
+void CCFD188View::OnUpdateGauss(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+
+void CCFD188View::OnLaplace()
+{
+	auto pDoc = GetDocument();
+	//拉普拉斯滤波模板
+	auto matrix = std::vector<std::vector<int32_t>>(3, std::vector<int32_t>(3, 0));
+
+	matrix[1][1] = 5;
+
+	matrix[0][1] = -1;
+	matrix[1][0] = -1;
+	matrix[1][2] = -1;
+	matrix[2][1] = -1;
+
+	pDoc->ActiveImage = ImageTemplateFilter::applyTemplateAverage(pDoc->ActiveImage,
+		ImageTemplateAverageFilterContext(matrix));
+	Invalidate();
+	pDoc->SetModifiedFlag();
+}
+
+
+void CCFD188View::OnUpdateLaplace(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+
+void CCFD188View::OnLaplaceNormal()
+{
+	auto pDoc = GetDocument();
+	//拉普拉斯滤波模板
+	auto matrix = std::vector<std::vector<int32_t>>(3, std::vector<int32_t>(3, -1));
+
+	matrix[1][1] = 9;
+
+	pDoc->ActiveImage = ImageTemplateFilter::applyTemplateAverage(pDoc->ActiveImage,
+		ImageTemplateAverageFilterContext(matrix));
+	Invalidate();
+	pDoc->SetModifiedFlag();
+}
+
+
+void CCFD188View::OnUpdateLaplaceNormal(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
 }
