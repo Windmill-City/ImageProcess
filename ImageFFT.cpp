@@ -21,7 +21,7 @@ std::string ImageFFT::PropertyName_B = "FFT_B";
 /// <param name="end"></param>
 void ImageFFT::reversal(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end)
 {
-	size_t N = (size_t)std::sqrt(std::distance(begin, end));
+	size_t N = std::distance(begin, end);
 	size_t NV_2 = N / 2;
 	size_t NM_1 = N - 1;
 
@@ -40,7 +40,7 @@ void ImageFFT::reversal(std::vector<std::complex<double>>::iterator begin, std::
 /// <param name="end"></param>
 void ImageFFT::transpose(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end)
 {
-	size_t N = (size_t)std::sqrt(std::distance(begin, end));
+	size_t N = std::sqrt(std::distance(begin, end));
 
 	for (size_t i = 0; i < N; i++)
 	{
@@ -74,11 +74,11 @@ void ImageFFT::fft(std::vector<std::complex<double>>::iterator begin, std::vecto
 	reversal(begin, end);
 
 	size_t N = std::distance(begin, end);
-	size_t L = (size_t)std::log2(N);
+	size_t L = std::log2(N);
 
 	for (size_t M = 1; M <= L; M++)
 	{
-		size_t LE = (size_t)std::pow(2, M);
+		size_t LE = std::pow(2, M);
 		size_t LE_1 = LE / 2;
 
 		std::complex<double> W(std::cos(-(M_PI / LE_1)), std::sin(-(M_PI / LE_1)));
@@ -114,7 +114,7 @@ void ImageFFT::ifft(std::vector<std::complex<double>>::iterator begin, std::vect
 
 	for (size_t i = 0; i < N; i++)
 	{
-		begin[i] = std::conj(begin[i]) / std::complex<double>((double)N, 0);
+		begin[i] = std::conj(begin[i]) / std::complex<double>(N, 0);
 	}
 }
 
@@ -125,7 +125,7 @@ void ImageFFT::ifft(std::vector<std::complex<double>>::iterator begin, std::vect
 /// <param name="end"></param>
 void ImageFFT::fft2(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end)
 {
-	size_t N = (size_t)std::sqrt(std::distance(begin, end));
+	size_t N = std::sqrt(std::distance(begin, end));
 
 	//行变换
 	for (size_t i = 0; i < N; i++)
@@ -153,7 +153,7 @@ void ImageFFT::fft2(std::vector<std::complex<double>>::iterator begin, std::vect
 /// <param name="end"></param>
 void ImageFFT::ifft2(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end)
 {
-	size_t N = (size_t)std::sqrt(std::distance(begin, end));
+	size_t N = std::sqrt(std::distance(begin, end));
 
 	//行变换
 	for (size_t i = 0; i < N; i++)

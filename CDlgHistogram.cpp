@@ -36,7 +36,7 @@ void CDlgHistogram::applyLinearTrans()
 	PosLeft = 255 - PointLeft.GetPos();
 	PosRight = 255 - PointRight.GetPos();
 	//斜率
-	auto slope = (double)PosRight - (double)PosLeft / 255.0;
+	auto slope = (double)(PosRight - PosLeft) / 255;
 	//截距
 	auto intercept = PosLeft;
 
@@ -139,8 +139,8 @@ void CDlgHistogram::OnPaint()
 	for (size_t i = 0; i < Histogram.size(); i++)
 	{
 		int scaled = (int)(Histogram[i] * scale);
-		dc.MoveTo(graphX + (int)i, graphY + graphHeight - scaled);
-		dc.LineTo(graphX + (int)i, graphY + graphHeight);
+		dc.MoveTo(graphX + i, graphY + graphHeight - scaled);
+		dc.LineTo(graphX + i, graphY + graphHeight);
 	}
 }
 

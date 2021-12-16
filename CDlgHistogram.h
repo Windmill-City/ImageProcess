@@ -20,8 +20,8 @@ private:
 	std::shared_ptr<Image> ImageOriginal;
 	std::vector<size_t> Histogram;
 
-	int PosLeft = 0;
-	int PosRight = 0;
+	int PosLeft;
+	int PosRight;
 public:
 	CDlgHistogram(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~CDlgHistogram();
