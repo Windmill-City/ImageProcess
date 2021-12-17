@@ -108,6 +108,9 @@
     <ClInclude Include="CDlgHistogram.h">
       <Filter>头文件\Window\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="CDlgFreqDomainFilter.h">
+      <Filter>头文件\Window\Dialogs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFD188.cpp">
@@ -174,6 +177,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CDlgHistogram.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CDlgFreqDomainFilter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

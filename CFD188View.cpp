@@ -48,6 +48,8 @@ BEGIN_MESSAGE_MAP(CCFD188View, CScrollView)
 	ON_UPDATE_COMMAND_UI(ID_Laplace, &CCFD188View::OnUpdateLaplace)
 	ON_COMMAND(ID_Laplace_Normal, &CCFD188View::OnLaplaceNormal)
 	ON_UPDATE_COMMAND_UI(ID_Laplace_Normal, &CCFD188View::OnUpdateLaplaceNormal)
+	ON_COMMAND(ID_FD_FILTER, &CCFD188View::OnFdFilter)
+	ON_UPDATE_COMMAND_UI(ID_FD_FILTER, &CCFD188View::OnUpdateFdFilter)
 END_MESSAGE_MAP()
 
 // CCFD188View 构造/析构
@@ -350,6 +352,21 @@ void CCFD188View::OnLaplaceNormal()
 
 
 void CCFD188View::OnUpdateLaplaceNormal(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
+}
+
+#include "CDlgFreqDomainFilter.h"
+
+void CCFD188View::OnFdFilter()
+{
+	CDlgFreqDomainFilter dlg;
+	dlg.setView(this);
+	dlg.DoModal();
+}
+
+
+void CCFD188View::OnUpdateFdFilter(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(GetDocument()->ActiveImage != nullptr);
 }

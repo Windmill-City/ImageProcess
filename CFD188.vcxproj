@@ -115,6 +115,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +167,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -184,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BMPFormat.h" />
+    <ClInclude Include="CDlgFreqDomainFilter.h" />
     <ClInclude Include="CDlgHistogram.h" />
     <ClInclude Include="CFD188.h" />
     <ClInclude Include="CFD188Doc.h" />
@@ -211,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BMPFormat.cpp" />
+    <ClCompile Include="CDlgFreqDomainFilter.cpp" />
     <ClCompile Include="CDlgHistogram.cpp" />
     <ClCompile Include="CFD188.cpp" />
     <ClCompile Include="CFD188Doc.cpp" />

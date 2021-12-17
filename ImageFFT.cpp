@@ -242,9 +242,9 @@ std::shared_ptr<Image> ImageFFT::ifft(std::shared_ptr<Image> image)
 {
 	std::shared_ptr<Image> result = std::make_shared<Image>(*image);
 
-	std::vector<std::complex<double>> complexR = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_R].get())->Value;
-	std::vector<std::complex<double>> complexG = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_G].get())->Value;
-	std::vector<std::complex<double>> complexB = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_B].get())->Value;
+	auto complexR = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_R].get())->Value;
+	auto complexG = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_G].get())->Value;
+	auto complexB = static_cast<ImagePropertyOf<std::vector<std::complex<double>>>*>(result->Properties[PropertyName_B].get())->Value;
 
 	auto R_future = std::async(std::launch::async, ifft2, complexR.begin(), complexR.end());
 	auto G_future = std::async(std::launch::async, ifft2, complexG.begin(), complexG.end());

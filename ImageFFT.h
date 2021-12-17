@@ -4,10 +4,10 @@
 #include "Image.h"
 class ImageFFT
 {
+public:
 	static std::string PropertyName_R;
 	static std::string PropertyName_G;
 	static std::string PropertyName_B;
-public:
 	static std::string PropertyName;
 public:
 	static void reversal(std::vector<std::complex<double>>::iterator begin, std::vector<std::complex<double>>::iterator end);

@@ -64,6 +64,8 @@ public:
 	afx_msg void OnUpdateLaplace(CCmdUI* pCmdUI);
 	afx_msg void OnLaplaceNormal();
 	afx_msg void OnUpdateLaplaceNormal(CCmdUI* pCmdUI);
+	afx_msg void OnFdFilter();
+	afx_msg void OnUpdateFdFilter(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // CFD188View.cpp 中的调试版本
